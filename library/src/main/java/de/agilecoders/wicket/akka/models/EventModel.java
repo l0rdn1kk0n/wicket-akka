@@ -1,6 +1,7 @@
 package de.agilecoders.wicket.akka.models;
 
 import akka.actor.ActorRef;
+import akka.actor.PoisonPill;
 import de.agilecoders.wicket.akka.Akka;
 import de.agilecoders.wicket.akka.util.Handler;
 import org.apache.wicket.model.IModel;
@@ -44,6 +45,8 @@ public class EventModel<T> implements IModel<T> {
     @Override
     public void detach() {
         value = null;
+
         Akka.instance().unsubscribeEvent(ref, channel);
+        ref.tell(PoisonPill.getInstance(), ActorRef.noSender());
     }
 }

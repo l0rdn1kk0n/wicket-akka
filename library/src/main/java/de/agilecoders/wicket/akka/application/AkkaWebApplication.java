@@ -61,8 +61,7 @@ public abstract class AkkaWebApplication extends WebApplication implements IAkka
     public void internalDestroy() {
         super.internalDestroy();
 
-        akka.system().shutdown();
-        akka.system().awaitTermination(shutdownTimeout);
+        akka.shutdownAndAwaitTermination(shutdownTimeout);
     }
 
     @Override

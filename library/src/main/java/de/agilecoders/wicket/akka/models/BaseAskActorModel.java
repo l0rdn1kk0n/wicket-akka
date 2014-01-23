@@ -11,11 +11,11 @@ import java.util.concurrent.Future;
  *
  * @author miha
  */
-public abstract class DAskActorModel<R, M> extends ActorModel<R> {
+public abstract class BaseAskActorModel<R, M> extends ActorModel<R> {
 
     private final Handler<R> handler;
 
-    public DAskActorModel() {
+    public BaseAskActorModel() {
         super();
 
         this.handler = new Handler<R>() {

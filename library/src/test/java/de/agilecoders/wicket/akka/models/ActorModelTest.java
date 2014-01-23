@@ -26,7 +26,7 @@ public class ActorModelTest extends AkkaAwareTest {
 
     @Test
     public void ask() throws Exception {
-        DAskActorModel<Integer, String> model = new DAskActorModel<Integer, String>() {
+        BaseAskActorModel<Integer, String> model = new BaseAskActorModel<Integer, String>() {
             @Override
             protected ActorRef newActor() {
                 return system().actorOf(Props.apply(new Creator<Actor>() {
@@ -54,7 +54,7 @@ public class ActorModelTest extends AkkaAwareTest {
 
     @Test
     public void askByConstructor() throws Exception {
-        DAskActorModel<Integer, String> model = new DAskActorModel<Integer, String>() {
+        BaseAskActorModel<Integer, String> model = new BaseAskActorModel<Integer, String>() {
             @Override
             protected ActorRef newActor() {
                 return system().actorOf(Props.apply(new Creator<Actor>() {
@@ -82,7 +82,7 @@ public class ActorModelTest extends AkkaAwareTest {
 
     @Test
     public void askWithScalaFuture() throws Exception {
-        DAskActorModel<Integer, String> model = new DAskActorModel<Integer, String>() {
+        BaseAskActorModel<Integer, String> model = new BaseAskActorModel<Integer, String>() {
             @Override
             protected ActorRef newActor() {
                 return system().actorOf(Props.apply(new Creator<Actor>() {
@@ -113,7 +113,7 @@ public class ActorModelTest extends AkkaAwareTest {
 
     @Test
     public void askUpdatesObject() throws Exception {
-        DAskActorModel<Integer, String> model = new DAskActorModel<Integer, String>() {
+        BaseAskActorModel<Integer, String> model = new BaseAskActorModel<Integer, String>() {
             @Override
             protected ActorRef newActor() {
                 return system().actorOf(Props.apply(new Creator<Actor>() {

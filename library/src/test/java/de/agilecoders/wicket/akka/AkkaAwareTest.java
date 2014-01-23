@@ -21,8 +21,7 @@ public class AkkaAwareTest {
 
     @AfterClass
     public static void afterClass() {
-        akka.system().shutdown();
-        akka.system().awaitTermination();
+        akka.shutdownAndAwaitTermination();
     }
 
     protected final Akka akka() {

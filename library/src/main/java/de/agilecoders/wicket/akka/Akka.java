@@ -14,6 +14,7 @@ import akka.japi.Creator;
 import com.typesafe.config.Config;
 import de.agilecoders.wicket.akka.util.Handler;
 import org.apache.wicket.util.lang.Args;
+import scala.concurrent.duration.Duration;
 
 /**
  * TODO miha: document class purpose
@@ -91,7 +92,7 @@ public final class Akka {
                     }
                 };
             }
-        }), "event-subscription");
+        }));
 
         eventStream().subscribe(ref, channel);
         return ref;
@@ -121,4 +122,13 @@ public final class Akka {
         return typedActorExtension().typedActorOf(props, actorRef);
     }
 
+    public void shutdownAndAwaitTermination(Duration shutdownTimeout) {
+        system.shutdown();
+        system.awaitTermination(shutdownTimeout);
+    }
+
+    public void shutdownAndAwaitTermination() {
+        system.shutdown();
+        system.awaitTermination();
+    }
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.Future;
  *
  * @author miha
  */
-public abstract class AskActorModel<R, M> extends DAskActorModel<R, M> {
+public abstract class AskActorModel<R, M> extends BaseAskActorModel<R, M> {
 
     private final M message;
 

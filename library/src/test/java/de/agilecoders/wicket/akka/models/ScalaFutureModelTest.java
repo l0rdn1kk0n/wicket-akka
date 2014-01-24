@@ -1,8 +1,8 @@
 package de.agilecoders.wicket.akka.models;
 
 import akka.dispatch.Futures;
+import de.agilecoders.wicket.akka.util.Util;
 import org.junit.Test;
-import scala.concurrent.ExecutionContext$;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 
@@ -46,7 +46,7 @@ public class ScalaFutureModelTest {
                 Thread.sleep(500);
                 return "";
             }
-        }, ExecutionContext$.MODULE$.global());
+        }, Util.globalExecutionContext());
 
         try {
             FutureModel.<String>of(f, Duration.apply(100, TimeUnit.MILLISECONDS)).getObject();

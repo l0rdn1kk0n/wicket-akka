@@ -6,7 +6,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 /**
- * TODO miha: document class purpose
+ * Base akka aware test class that provides access to an akka instance.
  *
  * @author miha
  */

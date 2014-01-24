@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * TODO miha: document class purpose
+ * tests the {@link de.agilecoders.wicket.akka.models.EventModel} class.
  *
  * @author miha
  */
@@ -19,6 +19,7 @@ public class EventModelTest extends AkkaAwareTest {
     @Test
     public void eventIsReceived() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
+
         EventModel<String> model = new EventModel<String>(String.class) {
             @Override
             public void setObject(String object) {

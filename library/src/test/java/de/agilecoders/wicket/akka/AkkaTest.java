@@ -5,8 +5,8 @@ import akka.actor.TypedProps;
 import akka.dispatch.Futures;
 import akka.japi.Option;
 import de.agilecoders.wicket.akka.util.TProps;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
@@ -23,15 +23,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class AkkaTest {
     private static ActorSystem system;
 
-    @BeforeClass
-    public static void beforeClass() throws Exception {
+    @Before
+    public void before() throws Exception {
+        Akka.reset();
+
         system = ActorSystem.create();
     }
 
-    @AfterClass
-    public static void afterClass() {
-        system.shutdown();
-        system.awaitTermination();
+    @After
+    public void after() {
+        Akka.reset();
     }
 
     @Test

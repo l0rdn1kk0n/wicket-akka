@@ -33,8 +33,10 @@ public final class Akka {
      * @return newly initialized akka instance
      */
     public static synchronized Akka initialize(ActorSystem system) {
-        if (instance == null) {
+        if (instance == null || instance.system().isTerminated()) {
             instance = new Akka(system);
+        } else {
+            throw new RuntimeException("already initialized.");
         }
 
         return instance;
@@ -202,6 +204,8 @@ public final class Akka {
      * @param shutdownTimeout the time to wait for actor system until it is shutdown.
      */
     public void shutdownAndAwaitTermination(Duration shutdownTimeout) {
+        reset();
+
         system.shutdown();
         system.awaitTermination(shutdownTimeout);
     }
@@ -213,6 +217,8 @@ public final class Akka {
      * block until after all on termination callbacks have been run.
      */
     public void shutdownAndAwaitTermination() {
+        reset();
+
         system.shutdown();
         system.awaitTermination();
     }
@@ -247,6 +253,17 @@ public final class Akka {
             typedActorExtension.poisonPill(actor);
         } else {
             throw new IllegalArgumentException("given arguments isn't a typed or untyped actor.");
+        }
+    }
+
+    public static void reset() {
+        if (instance != null) {
+            if (!instance.system.isTerminated()) {
+                instance.system.shutdown();
+                instance.system.awaitTermination();
+            }
+
+            instance = null;
         }
     }
 }

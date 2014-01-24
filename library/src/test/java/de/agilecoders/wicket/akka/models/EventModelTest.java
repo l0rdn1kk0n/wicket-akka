@@ -29,7 +29,9 @@ public class EventModelTest extends AkkaAwareTest {
 
         eventStream().publish("test");
 
-        latch.await(100, TimeUnit.MILLISECONDS);
+        latch.await(250, TimeUnit.MILLISECONDS);
         assertThat(model.getObject(), is("test"));
+
+        model.detach();
     }
 }

@@ -17,7 +17,43 @@ import scala.concurrent.duration.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
- * TODO miha: document class purpose
+ * Akka based {@link org.apache.wicket.protocol.http.WebApplication} that provides access to
+ * {@link de.agilecoders.wicket.akka.Akka}. It's also possible to provide your own {@link akka.actor.ActorSystem} or
+ * {@link com.typesafe.config.Config}.
+ *
+ * <pre>
+ * <code>
+ * public class MyCustomApplication extends AkkaWebApplication {
+ *
+ *     {@literal @}Override
+ *     protected String newActorSystemName() {
+ *         return "my-custom-actor-system-name";
+ *     }
+ *
+ *     {@literal @}Override
+ *     protected ActorSystem newActorSystem(String name, Config config) {
+ *         return ActorSystem.create(name, config);
+ *     }
+ *
+ *     {@literal @}Override
+ *     protected Config newActorConfig() {
+ *         return ConfigFactory.load("my-custom-config.json").withFallback(ConfigFactory.load());
+ *     }
+ *
+ *     {@literal @}Override
+ *     protected void onTermination() {
+ *         logger.info("actor system was stopped.");
+ *     }
+ *
+ *     {@literal @}Override
+ *     protected Duration newShutdownTimeout() {
+ *         // my.custom.shutdownTimeout = 5 sec
+ *         return Duration.apply(getActorConfig().getString("my.custom.shutdownTimeout"));
+ *     }
+ *
+ * }
+ * </code>
+ * </pre>
  *
  * @author miha
  */
@@ -46,8 +82,8 @@ public abstract class AkkaWebApplication extends WebApplication implements IAkka
         super.internalInit();
 
         ActorSystem actorSystem = newActorSystem(newActorSystemName(), newActorConfig());
-        shutdownTimeout = newShutdownTimeout();
         akka = Akka.initialize(actorSystem);
+        shutdownTimeout = newShutdownTimeout();
 
         actorSystem.registerOnTermination(new Runnable() {
             @Override
@@ -90,11 +126,6 @@ public abstract class AkkaWebApplication extends WebApplication implements IAkka
     }
 
     @Override
-    public final ActorSystem.Settings getActorSettings() {
-        return akka.settings();
-    }
-
-    @Override
     public final <T> T typedActorOf(TypedProps<T> props, String name) {
         return akka.typedActorOf(props, name);
     }
@@ -105,8 +136,18 @@ public abstract class AkkaWebApplication extends WebApplication implements IAkka
     }
 
     @Override
-    public <T> T typedActorOf(TypedProps<T> props, ActorRef actorRef) {
+    public final <T> T typedActorOf(TypedProps<T> props, ActorRef actorRef) {
         return akka.typedActorOf(props, actorRef);
+    }
+
+    @Override
+    public void stopActor(Object actor) {
+        akka.stop(actor);
+    }
+
+    @Override
+    public void poisonPill(Object actor) {
+        akka.poisonPill(actor);
     }
 
     /**
